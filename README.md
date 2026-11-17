@@ -2,6 +2,9 @@
 
 [English](README.en.md) | 中文
 
+[![test](https://github.com/zpb332/dsh-competition-team/actions/workflows/test.yml/badge.svg)](https://github.com/zpb332/dsh-competition-team/actions/workflows/test.yml)
+[![release](https://img.shields.io/github/v/release/zpb332/dsh-competition-team?include_prereleases&label=release)](https://github.com/zpb332/dsh-competition-team/releases/latest)
+
 > 给 DeepSeek Harness 加一支「竞赛智队」：队长负责拆题和派活，核心与队员各自在独立会话里干活，跨会话靠交接文件协作；你在面板上批提案、控预算、看进度。
 
 一个 DSH 插件，不是独立应用。装进 DSH 后，左侧栏会多一个「竞赛智队」入口。

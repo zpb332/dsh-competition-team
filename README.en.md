@@ -2,6 +2,9 @@
 
 English | [中文](README.md)
 
+[![test](https://github.com/zpb332/dsh-competition-team/actions/workflows/test.yml/badge.svg)](https://github.com/zpb332/dsh-competition-team/actions/workflows/test.yml)
+[![release](https://img.shields.io/github/v/release/zpb332/dsh-competition-team?include_prereleases&label=release)](https://github.com/zpb332/dsh-competition-team/releases/latest)
+
 > A competition team for DeepSeek Harness: a captain plans and dispatches, core members and workers run in independent sessions, and the panel lets you approve proposals, watch progress and cap the token budget.
 
 A DSH plugin, not a standalone app. Once installed, a **Competition Team** entry appears in the left sidebar.
