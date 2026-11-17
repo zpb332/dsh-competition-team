@@ -1,0 +1,4 @@
+node_modules/
+.dsh-competition/
+*.log
+.DS_Store

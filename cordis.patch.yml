@@ -1,0 +1,11 @@
+# dsh-competition-team bundle patch.
+#
+# One dual-face row: the Node half (exports ".") owns the team store, the
+# member Sessions, the agent tool and the HTTP bridge; the `dsh.client`
+# declaration in package.json loads the browser half (exports "./client"),
+# which registers the left-sidebar entry, the tree page and the live progress
+# row. Install the package directory with Plugins > Add plugin (or
+# `dsh plugin add <dir>`); no profile file is edited by hand.
+- insert:
+    - id: competition-team
+      name: 'dsh-competition-team'

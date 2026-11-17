@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "竞赛智队",
+    "description": "把一场比赛拆成一支自定义智能团队：角色分队长/核心/队员三类，在左侧入口的画布上连线定义工作流、给每个角色挑模型，确认后才开工。成员各占一个独立会话，前一位的产出自动交接给下一位，树状图实时标注进度。",
+    "detail": "docs/DETAIL.md"
+  },
+  "entry": {
+    "label": "竞赛智队",
+    "description": "五角色独立会话 + 自动接力"
+  },
+  "panel": {
+    "title": "竞赛智队",
+    "subtitle": "每位成员一个独立会话，结果自动交接",
+    "empty": "还没有团队。创建后可让队长先拆题，建模、编程、论文、审核依次接力。",
+    "create": "新建竞赛团队",
+    "createTitle": "队伍名称",
+    "createBrief": "题目与目标",
+    "createCwd": "共享工作目录",
+    "createAuto": "建好后自动接力",
+    "cancel": "取消",
+    "confirm": "创建并开跑",
+    "auto": "自动接力",
+    "manual": "手动推进",
+    "refresh": "刷新",
+    "running": "进行中",
+    "done": "已完成",
+    "pending": "等待",
+    "failed": "失败",
+    "stopped": "已停止",
+    "waitingDeps": "等待 {names}",
+    "noSession": "尚未开会话",
+    "openSession": "打开会话",
+    "start": "开始",
+    "retry": "重试",
+    "stop": "停止",
+    "send": "追加指令",
+    "sendPlaceholder": "给这位成员补一句话…",
+    "summary": "本轮汇报",
+    "handoff": "交接文件",
+    "artifacts": "产物",
+    "noHandoff": "还没有交接文件",
+    "noArtifacts": "还没有产物",
+    "progressOf": "进度 {done}/{total}",
+    "created": "团队已创建",
+    "started": "已派发",
+    "stoppedMsg": "已停止",
+    "sentMsg": "指令已排队",
+    "delete": "删除团队",
+    "deleteConfirm": "再点一次确认删除",
+    "verdictPass": "审核通过",
+    "verdictRevise": "需返工",
+    "log": "动态"
+  },
+  "footer": {
+    "label": "竞赛智队",
+    "none": "未建队",
+    "running": "{name}进行中",
+    "done": "全部完成",
+    "idle": "待推进"
+  }
+}

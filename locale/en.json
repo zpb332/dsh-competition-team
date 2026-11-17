@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "Competition Team",
+    "description": "Turn one contest into a custom team: captain, core and member roles on a canvas where you wire the workflow and pick each role's model, then confirm to start. Every member gets an independent Session, hand-offs are automatic, and a live tree tracks progress.",
+    "detail": "docs/DETAIL.md"
+  },
+  "entry": {
+    "label": "Competition Team",
+    "description": "Five role sessions with automatic hand-off"
+  },
+  "panel": {
+    "title": "Competition Team",
+    "subtitle": "One independent Session per member, handed off automatically",
+    "empty": "No team yet. Create one and the captain splits the brief; modeling, coding, writing and review follow.",
+    "create": "New team",
+    "createTitle": "Team name",
+    "createBrief": "Problem and goal",
+    "createCwd": "Shared working directory",
+    "createAuto": "Start the hand-off chain immediately",
+    "cancel": "Cancel",
+    "confirm": "Create and start",
+    "auto": "Auto hand-off",
+    "manual": "Manual",
+    "refresh": "Refresh",
+    "running": "Running",
+    "done": "Done",
+    "pending": "Waiting",
+    "failed": "Failed",
+    "stopped": "Stopped",
+    "waitingDeps": "Waiting for {names}",
+    "noSession": "No Session yet",
+    "openSession": "Open Session",
+    "start": "Start",
+    "retry": "Retry",
+    "stop": "Stop",
+    "send": "Follow-up",
+    "sendPlaceholder": "Add one instruction for this member…",
+    "summary": "This round",
+    "handoff": "Hand-off note",
+    "artifacts": "Artifacts",
+    "noHandoff": "No hand-off note yet",
+    "noArtifacts": "No artifacts yet",
+    "progressOf": "Progress {done}/{total}",
+    "created": "Team created",
+    "started": "Dispatched",
+    "stoppedMsg": "Stopped",
+    "sentMsg": "Instruction queued",
+    "delete": "Delete team",
+    "deleteConfirm": "Click again to delete",
+    "verdictPass": "Review passed",
+    "verdictRevise": "Revision needed",
+    "log": "Activity"
+  },
+  "footer": {
+    "label": "Competition Team",
+    "none": "No team",
+    "running": "{name} running",
+    "done": "All done",
+    "idle": "Idle"
+  }
+}

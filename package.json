@@ -1,0 +1,64 @@
+{
+  "name": "dsh-competition-team",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH plugin: a competition team of independent sessions (captain, core, members) with a canvas workflow, proposals, audit, budget, stall recovery and artifact quality gates.",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "docs",
+    "icon.svg",
+    "lib",
+    "README.md",
+    "LICENSE",
+    "README.en.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1",
+    "node": ">=20"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "agent-teams",
+    "competition",
+    "multi-agent",
+    "workflow"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zpb332/dsh-competition-team.git"
+  },
+  "homepage": "https://github.com/zpb332/dsh-competition-team#readme",
+  "bugs": {
+    "url": "https://github.com/zpb332/dsh-competition-team/issues"
+  }
+}
