@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node --test 2>&1 | tee test-output.log
+          node --test --test-concurrency=1 2>&1 | tee test-output.log
       - name: Test output on failure
         if: failure()
         shell: bash
