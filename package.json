@@ -43,7 +43,8 @@
     }
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "soak": "node scripts/soak.mjs"
   },
   "keywords": [
     "dsh",
