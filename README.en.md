@@ -54,6 +54,9 @@ Replace `web` with your profile name. The Desktop profile is managed by the app;
 
 Reload the plugin (or disable/enable it) and the **Competition Team** icon appears in the sidebar.
 
+> Verified in a clean profile with `dsh plugin --profile test add github:zpb332/dsh-competition-team`: the package lands in `node_modules` and is added to the profile's `dsh.profile.bundles`; `--dump-config` shows the `competition-team` row. If the sidebar stays empty, check that list first.
+
+
 > `github:` installs the default branch. Pin a commit for a reproducible version: `github:zpb332/dsh-competition-team#<40-char commit>`; market entries pin commits too.
 
 ### Local development (link)

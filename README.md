@@ -54,6 +54,9 @@ dsh plugin --profile web add github:zpb332/dsh-competition-team
 
 装好后在插件设置里重载（或关闭再开启）该插件，左侧栏出现「竞赛智队」即安装成功。
 
+> 已用 `dsh plugin --profile test add github:zpb332/dsh-competition-team` 在干净 profile 里验证：包会装进 `node_modules`，并自动写入 profile 的 `dsh.profile.bundles`；`--dump-config` 能看到 `competition-team` 这一行。如果侧栏没出现，先检查 `bundles` 列表。
+
+
 > `github:` 默认安装主分支。需要可复现版本时固定到提交：`github:zpb332/dsh-competition-team#<40 位 commit>`；市场条目也会固定提交。
 
 ### 本地开发（link）

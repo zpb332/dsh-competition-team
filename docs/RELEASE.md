@@ -3,6 +3,7 @@
 ## Before tagging
 
 - [ ] `node --test` — all green (currently 63 tests)
+- [x] Clean-profile install verified (`dsh plugin ... add github:...`; `--dump-config` shows the row)
 - [ ] `npm pack --dry-run` — confirm `lib/`, `docs/images/`, `README.en.md`, `CHANGELOG.md` are in the tarball
 - [ ] `git status` — no `.dsh-competition/`, `node_modules/`, logs, or personal paths
 - [ ] Version in `package.json` matches `CHANGELOG.md`
