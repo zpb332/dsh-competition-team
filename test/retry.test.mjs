@@ -8,6 +8,14 @@ const { store, sessions, prompts, cwd, mod } = await makeStore()
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+async function waitFor(predicate, timeout = 5000) {
+  const deadline = Date.now() + timeout
+  while (!predicate()) {
+    if (Date.now() > deadline) throw new Error('timed out waiting for condition')
+    await sleep(10)
+  }
+}
+
 function promptsFor(sessionId) {
   return prompts.filter(item => item.sessionId === sessionId)
 }
@@ -32,8 +40,7 @@ test('a transient agent error schedules a retry and resumes the member', async (
   assert.equal(captain.retryAttempts, 1)
   assert.equal(store.snapshotFor(team, []).status, 'running')
 
-  await sleep(70)
-  assert.equal(captain.status, 'running')
+  await waitFor(() => captain.status === 'running')
   const sent = promptsFor(captain.sessionId).slice(before)
   assert.equal(sent.length, 1)
   assert.match(sent[0].text, /【网络重试】/)
@@ -64,14 +71,12 @@ test('transient retries stop after two attempts', async () => {
 
   await fail()
   assert.equal(captain.retryAttempts, 1)
-  await sleep(50)
-  assert.equal(captain.status, 'running')
+  await waitFor(() => captain.status === 'running')
 
   await fail()
   assert.equal(captain.retryAttempts, 2)
   assert.equal(captain.status, 'retrying')
-  await sleep(110)
-  assert.equal(captain.status, 'running')
+  await waitFor(() => captain.status === 'running')
 
   await fail()
   assert.equal(captain.status, 'failed')
