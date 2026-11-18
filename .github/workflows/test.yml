@@ -32,4 +32,13 @@ jobs:
             tail -n 120 test-output.log
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Annotate test failures
+        if: failure()
+        shell: bash
+        run: |
+          if [ -f test-output.log ]; then
+            tail -n 20 test-output.log | while IFS= read -r line; do
+              echo "::error title=test-output::$line"
+            done
+          fi
       - run: npm pack --dry-run
