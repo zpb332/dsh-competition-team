@@ -30,9 +30,35 @@
 - DeepSeek Harness `>= 0.2.1`（当前验证于 `0.2.2-rc.3` desktop runtime）
 - Node.js `>= 20`（仅测试需要）
 
-## 安装（本地插件）
+## 安装
 
-目前没有发布到 npm，按本地插件安装：
+插件没有发布到 npm，从 GitHub 源安装。
+
+### 普通用户
+
+**DSH Desktop**：打开 Settings → Plugins 的安装入口，粘贴：
+
+```text
+github:zpb332/dsh-competition-team
+```
+
+不同 DSH 版本的入口名称可能略有不同；如果当前版本没有「从源安装」的输入框，用下面的命令。
+
+**dsh web / 自建 profile**：
+
+```bash
+dsh plugin --profile web add github:zpb332/dsh-competition-team
+```
+
+把 `web` 换成你实际使用的 profile。DSH Desktop 的 profile 由应用管理，不要手改。
+
+装好后在插件设置里重载（或关闭再开启）该插件，左侧栏出现「竞赛智队」即安装成功。
+
+> `github:` 默认安装主分支。需要可复现版本时固定到提交：`github:zpb332/dsh-competition-team#<40 位 commit>`；市场条目也会固定提交。
+
+### 本地开发（link）
+
+克隆仓库后，把本地目录 link 进 profile：
 
 1. 克隆仓库到任意目录：
    ```bash

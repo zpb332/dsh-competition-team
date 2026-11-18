@@ -30,9 +30,35 @@ A DSH plugin, not a standalone app. Once installed, a **Competition Team** entry
 - DeepSeek Harness `>= 0.2.1` (verified against `0.2.2-rc.3` desktop runtime)
 - Node.js `>= 20` (tests only)
 
-## Install (local plugin)
+## Install
 
-Not published to npm. Install it as a local plugin:
+The plugin is not on npm. Install it from the GitHub source.
+
+### Regular users
+
+**DSH Desktop**: open the install entry under Settings → Plugins and paste:
+
+```text
+github:zpb332/dsh-competition-team
+```
+
+Menu names differ slightly between DSH versions; if your build has no source-install field, use the CLI below.
+
+**dsh web / custom profile**:
+
+```bash
+dsh plugin --profile web add github:zpb332/dsh-competition-team
+```
+
+Replace `web` with your profile name. The Desktop profile is managed by the app; don't edit it by hand.
+
+Reload the plugin (or disable/enable it) and the **Competition Team** icon appears in the sidebar.
+
+> `github:` installs the default branch. Pin a commit for a reproducible version: `github:zpb332/dsh-competition-team#<40-char commit>`; market entries pin commits too.
+
+### Local development (link)
+
+Clone the repo and link the local directory into your profile:
 
 1. Clone the repo:
    ```bash
