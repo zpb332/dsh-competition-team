@@ -161,6 +161,14 @@
 - **宿主重载**：`retrying` 的成员在加载时转回 `pending`，由启动自愈接力，不会永远停在重试倒计时里。
 
 
+
+## 上游失败传播（这一版新增）
+
+- 成员永久失败（auth / model-missing / bad-request / transient-exhausted / stalled）时，所有仍在 `pending` 的传递下游会被标成 `blocked`，错误为 `upstream-failed:<失败角色>`，不再显示含糊的「等待」。
+- 重跑或跳过失败成员后，`unblockDependents` 把只被它挡住的下游放回 `pending`；如果还有别的失败上游，继续保持 blocked。
+- 团队状态会显示 `blocked`，审计记录一条 `blocked / unblock`；面板里 blocked 成员的详情会写「上游失败，等待重跑或跳过」。
+- 浸泡测试从「12 队里 2 队直接卡在上游、1 队传递卡住」降到 **0 队上游卡住**，只剩预算暂停 1 队（预期）。
+
 ## 通知收件箱（这一版新增）
 
 - **持久化**：提案、任务书、阻塞、停滞、失败、预算用尽都会写一条 `notifications`（最多 30 条），落 `team.json`，刷新/重启不丢。

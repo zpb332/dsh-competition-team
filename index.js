@@ -467,9 +467,57 @@ class TeamStore {
     this.audit(team, '系统', 'error', member.name, context + '：' + member.error)
     this.note(team, member.name + ' ' + context + '：' + (info.transient ? '临时错误重试次数用尽' : info.code))
     this.notify(team, 'failed', member.name + ' ' + context + '：' + member.error)
+    this.propagateUpstreamFailure(team, member.role)
     this.retireLive(member.sessionId)
     await this.save(team)
     return false
+  }
+
+  /** Mark every still-pending descendant of a failed member as blocked. */
+  propagateUpstreamFailure(team, failedRole) {
+    const failed = new Set([failedRole])
+    let changed = false
+    for (;;) {
+      let added = false
+      for (const member of team.members) {
+        if (member.status !== STATUS.pending) continue
+        const blockers = member.deps.filter(dep => failed.has(dep))
+        if (blockers.length === 0) continue
+        member.status = STATUS.blocked
+        member.error = 'upstream-failed:' + blockers.join(',')
+        member.taskTurnOpen = false
+        member.finishedAt = nowStamp()
+        failed.add(member.role)
+        changed = true
+        added = true
+      }
+      if (!added) break
+    }
+    if (changed) {
+      this.audit(team, '系统', 'blocked', '下游', '上游失败：' + failedRole)
+      this.note(team, '上游 ' + failedRole + ' 失败，下游已标记阻塞')
+    }
+    return changed
+  }
+
+  /** Return downstream members to pending once their failed upstreams were retried or skipped. */
+  unblockDependents(team, role) {
+    const failed = new Set(team.members.filter(member => member.status === STATUS.failed).map(member => member.role))
+    let changed = false
+    for (const member of team.members) {
+      if (member.status !== STATUS.blocked) continue
+      if (!String(member.error || '').startsWith('upstream-failed:')) continue
+      if (member.deps.some(dep => failed.has(dep))) continue
+      member.status = STATUS.pending
+      member.error = null
+      member.errorDetail = null
+      member.taskTurnOpen = false
+      member.finishedAt = null
+      changed = true
+      this.note(team, member.name + ' 恢复等待：上游已处理')
+    }
+    if (changed) this.audit(team, '系统', 'unblock', '下游', role + ' 已处理，下游恢复')
+    return changed
   }
 
   async scheduleTransientRetry(team, member, info, message) {
@@ -1354,6 +1402,7 @@ class TeamStore {
     this.note(team, member.name + ' 停滞未恢复：' + detail)
     this.notify(team, 'stalled', member.name + ' 停滞未恢复：' + detail)
     this.audit(team, '系统', 'stall', member.name, '停滞未恢复：' + detail)
+    this.propagateUpstreamFailure(team, member.role)
     await this.save(team)
   }
 
@@ -1376,6 +1425,7 @@ class TeamStore {
     if (member.sessionId) this.retireLive(member.sessionId)
     this.audit(team, actor, 'skip', member.name, '用户跳过该成员')
     this.note(team, '跳过 ' + member.name + '（下游按现有产物继续）')
+    this.unblockDependents(team, member.role)
     await this.save(team)
     if (team.auto) await this.startReady(team)
     return { ok: true, skipped: member.role }
@@ -1573,6 +1623,7 @@ class TeamStore {
     member.finishedAt = null
     member.error = null
     member.rounds += 1
+    this.unblockDependents(team, member.role)
     this.live.set(sessionId, {
       progress: '已派发，等待模型开工…', tool: null, at: nowStamp(), recent: [],
       captain: member.kind === 'captain',

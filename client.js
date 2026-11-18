@@ -116,6 +116,7 @@ window.__ModuleLoader__.load({
       'panel.taskBookBadEntry': '条目缺 role/task',
       'panel.taskBookUnknownRole': '未知角色',
       'panel.taskBookShort': '任务过短',
+      'panel.upstreamFailed': '上游失败，等待重跑或跳过：',
       'panel.qualityWarnings': '产物质量告警',
       'panel.qualityLow': '产物质量不合格',
       'quality.missingSections': '缺少常见章节标题',
@@ -313,6 +314,7 @@ window.__ModuleLoader__.load({
       'panel.taskBookBadEntry': 'Entry missing role/task',
       'panel.taskBookUnknownRole': 'Unknown role',
       'panel.taskBookShort': 'Task too short',
+      'panel.upstreamFailed': 'Upstream failed; retry or skip it first: ',
       'panel.qualityWarnings': 'Artifact quality warnings',
       'panel.qualityLow': 'Artifact quality failed',
       'quality.missingSections': 'Missing common section headings',
@@ -545,6 +547,9 @@ window.__ModuleLoader__.load({
       if (reason === 'no-output') return t('panel.blockedNoOutput')
       if (reason === 'missing-artifacts') return t('panel.blockedMissing')
       if (reason === 'member-blocked') return t('panel.blockedMember')
+      if (reason.startsWith('upstream-failed:')) {
+        return t('panel.upstreamFailed') + reason.slice('upstream-failed:'.length).split(',').join('、')
+      }
       return String(reason || '')
     }
 
