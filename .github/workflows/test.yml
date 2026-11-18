@@ -17,5 +17,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - run: node --test
+      - name: Run tests
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test 2>&1 | tee test-output.log
+      - name: Test output on failure
+        if: failure()
+        shell: bash
+        run: |
+          {
+            echo '### Test output (tail)'
+            echo '```'
+            tail -n 120 test-output.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - run: npm pack --dry-run
