@@ -21,6 +21,10 @@ window.__ModuleLoader__.load({
     const PANEL = 'competition-team'
     const NS = 'competition-team'
     const API = '/competition-team/api'
+    const TOKEN = typeof window !== 'undefined' && window.__COMPETITION_TEAM_TOKEN__
+      ? String(window.__COMPETITION_TEAM_TOKEN__)
+      : ''
+    const TOKEN_HEADER = TOKEN ? { 'x-competition-team-token': TOKEN } : {}
     const POLL_MS = 2000
 
     const ZH = {
@@ -453,7 +457,7 @@ window.__ModuleLoader__.load({
         method: 'GET',
         cache: 'no-store',
         credentials: 'same-origin',
-        headers: { 'x-competition-team': '1' },
+        headers: { 'x-competition-team': '1', ...TOKEN_HEADER },
       }).then(async response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
         const data = await response.json()
@@ -479,7 +483,7 @@ window.__ModuleLoader__.load({
         method: 'POST',
         cache: 'no-store',
         credentials: 'same-origin',
-        headers: { 'content-type': 'application/json', 'x-competition-team': '1' },
+        headers: { 'content-type': 'application/json', 'x-competition-team': '1', ...TOKEN_HEADER },
         body: JSON.stringify(payload),
       })
       let data = {}
@@ -1240,7 +1244,7 @@ details[open] > .ct-summary::before { content:'▾ '; }
 
       useEffect(() => {
         let dead = false
-        fetch('/competition-team/api/models', { cache: 'no-store', credentials: 'same-origin' })
+        fetch('/competition-team/api/models', { cache: 'no-store', credentials: 'same-origin', headers: TOKEN_HEADER })
           .then(response => (response.ok ? response.json() : null))
           .then(value => { if (!dead && value && value.ok) setCatalog(value) })
           .catch(() => { /* the model list is optional */ })

@@ -7,7 +7,7 @@ import { Readable, Writable } from 'node:stream'
 
 process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'ct-http-home-'))
 const { makeHost } = await import('../test-support/host.mjs')
-const { handler } = await makeHost()
+const { handler, token } = await makeHost()
 const cwd = await mkdtemp(join(tmpdir(), 'ct-http-cwd-'))
 
 const HOST = '127.0.0.1:51949'
@@ -49,7 +49,11 @@ async function call({ method = 'GET', path, headers = {}, body = '' } = {}) {
   const request = Readable.from(body ? [Buffer.from(body)] : [])
   request.method = method
   request.url = path
-  request.headers = { host: HOST, ...headers }
+  request.headers = {
+    host: HOST,
+    ...(token ? { 'x-competition-team-token': token } : {}),
+    ...headers,
+  }
   const response = new FakeResponse()
   const finished = new Promise((resolve, reject) => {
     response.on('finish', () => resolve(response))
@@ -63,9 +67,16 @@ function credentialHeaders(extra = {}) {
   return {
     origin: ORIGIN,
     'x-competition-team': '1',
+    ...(token ? { 'x-competition-team-token': token } : {}),
     ...extra,
   }
 }
+
+test('state without the install token is rejected', async () => {
+  const denied = await call({ path: '/competition-team/api/state', headers: { 'x-competition-team-token': '' } })
+  assert.equal(denied.status, 403)
+  assert.equal(denied.json().error, 'token')
+})
 
 test('state is same-origin only', async () => {
   const ok = await call({ path: '/competition-team/api/state' })

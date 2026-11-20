@@ -13,8 +13,8 @@
  * @module dsh-competition-team
  */
 
-import { randomUUID } from 'node:crypto'
-import { createReadStream } from 'node:fs'
+import { randomUUID, timingSafeEqual } from 'node:crypto'
+import { createReadStream, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { mkdir, readFile, readdir, rename, stat, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { dirname, extname, isAbsolute, join, resolve, sep } from 'node:path'
@@ -2401,6 +2401,30 @@ class TeamStore {
   }
 }
 
+const HTTP_TOKEN_NAME = '__COMPETITION_TEAM_TOKEN__'
+const HTTP_TOKEN_FILE = join(DATA_DIR, 'http-token')
+
+/** Load the per-install HTTP token, creating it on first use. */
+function loadOrCreateHttpToken() {
+  try {
+    const existing = readFileSync(HTTP_TOKEN_FILE, 'utf8').trim()
+    if (existing.length >= 32) return existing
+  } catch { /* create below */ }
+  const token = randomUUID().replace(/-/g, '')
+  try {
+    mkdirSync(DATA_DIR, { recursive: true })
+    writeFileSync(HTTP_TOKEN_FILE, token, { encoding: 'utf8', mode: 0o600 })
+  } catch { /* read-only profile: fall back to an in-memory token */ }
+  return token
+}
+
+/** Constant-time check of the token header. */
+function tokenValid(request, token) {
+  const supplied = request.headers['x-competition-team-token']
+  if (typeof supplied !== 'string' || supplied.length !== token.length) return false
+  return timingSafeEqual(Buffer.from(supplied), Buffer.from(token))
+}
+
 /** Route helpers. Only same-origin JSON is accepted. */
 function sameOrigin(request) {
   const origin = request.headers.origin
@@ -2624,10 +2648,17 @@ function toolDefinition(ctx, store) {
 }
 
 /** Serve the panel's state, mutations and artifact bytes. */
-function handleHttp(ctx, store, request, response) {
+function handleHttp(ctx, store, token, request, response) {
   const url = new URL(request.url || '/', 'http://127.0.0.1')
   if (!sameOrigin(request)) {
     sendJson(response, 403, { ok: false, error: 'cross-origin' })
+    return
+  }
+  const guarded = url.pathname === `${API_PREFIX}/state`
+    || url.pathname === `${API_PREFIX}/models`
+    || url.pathname === `${API_PREFIX}/action`
+  if (guarded && !tokenValid(request, token)) {
+    sendJson(response, 403, { ok: false, error: 'token' })
     return
   }
   if (url.pathname === `${API_PREFIX}/state`) {
@@ -2759,6 +2790,10 @@ function handleHttp(ctx, store, request, response) {
 /** Host entry point. */
 export function apply(ctx) {
   const store = new TeamStore(ctx)
+  const httpToken = loadOrCreateHttpToken()
+  ctx.on('webserver/index-inject', table => {
+    table.push({ kind: 'global', name: HTTP_TOKEN_NAME, value: httpToken })
+  })
   ctx.effect(() => {
     store.init()
       // Load once eagerly so `session/event` handlers know their teams even
@@ -2785,7 +2820,7 @@ export function apply(ctx) {
     path: API_PREFIX,
     handler: (request, response) => {
       try {
-        handleHttp(ctx, store, request, response)
+        handleHttp(ctx, store, httpToken, request, response)
       } catch (error) {
         sendJson(response, 500, { ok: false, error: String(error && error.message ? error.message : error) })
       }

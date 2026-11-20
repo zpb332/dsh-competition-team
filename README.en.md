@@ -141,7 +141,8 @@ Structure:
 
 ## Security
 
-- HTTP routes are same-origin only and require the `x-competition-team: 1` header.
+- HTTP control routes (`state` / `models` / `action`) are same-origin only and require a per-install token; the DSH page receives it at boot and it never appears in a URL.
+- The artifact file route (`file`) keeps same-origin checks only, because images/previews need a direct URL; it stays inside the team directory and rejects traversal.
 - Artifact reads are confined to the team directory; path traversal is rejected.
 - Member sandboxes follow DSH permission presets (the reviewer runs read-only by default).
 

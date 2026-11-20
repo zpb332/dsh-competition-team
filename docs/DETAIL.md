@@ -191,6 +191,14 @@
 - 这次只验证「主链路能跑」，没有覆盖长局、限流、宿主升级中途断连。
 - 真实会话依赖 DSH 内部 `sessionController / sessionQuery / agents`；大版本升级仍需重新验证。
 
+## HTTP 访问 token（这一版新增）
+
+- 每次安装生成一个 32 位随机 token，存在 `$DSH_HOME/data/competition-team/http-token`，权限尽量设为 0600。
+- 通过 `webserver/index-inject` 注入 `window.__COMPETITION_TEAM_TOKEN__`，只进入 DSH 页面；客户端在 `state / models / action` 请求里带 `x-competition-team-token`。
+- 没有 token 的请求返回 403 `token`；跨域请求仍然先被同源检查拒绝。
+- 产物 `file` 路由保留同源检查，不要求 token，因为 `<img>`/预览需要直接 URL；它仍限制在团队目录内。
+- 测试覆盖：无 token 403、有 token 200、跨域仍 403。
+
 ## 边界
 
 - 团队记录在 `<共享目录>/.dsh-competition/<团队 id>/`；索引在 `$DSH_HOME/data/competition-team/`。删团队只移出列表，不删会话和文件。
