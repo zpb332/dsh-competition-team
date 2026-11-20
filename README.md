@@ -27,7 +27,7 @@
 
 ## 环境
 
-- DeepSeek Harness `>= 0.2.1`（当前验证于 `0.2.2-rc.3` desktop runtime）
+- DeepSeek Harness `>= 0.2.1`（`0.2.2-rc.5` 上完成建队、派活、交接真实冒烟；`0.2.2-rc.3` 上跑过完整测试）
 - Node.js `>= 20`（仅测试需要）
 
 ## 安装

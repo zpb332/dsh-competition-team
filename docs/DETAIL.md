@@ -184,6 +184,13 @@
 - **HTTP 路由测试**：用模拟 Host 捕获 `webServer` handler，覆盖同源校验、CSRF 头、坏 JSON、建队→查询、路径穿越、文件服务、models 映射、未知 action。
 - **规模**：63 个用例；Client 仍是单文件，渲染层暂无自动化测试。
 
+## 兼容性验证（2026-11-20）
+
+- `0.2.2-rc.3`：完整 `node --test`（66 个用例）通过，宿主行为用模拟环境覆盖。
+- `0.2.2-rc.5`：真实双成员队（队长 + 队员）建队、确认、自动派活、结构化交接全部完成，团队 `done`，成员 tokens 约 560k + 350k，无阻塞、无错误。
+- 这次只验证「主链路能跑」，没有覆盖长局、限流、宿主升级中途断连。
+- 真实会话依赖 DSH 内部 `sessionController / sessionQuery / agents`；大版本升级仍需重新验证。
+
 ## 边界
 
 - 团队记录在 `<共享目录>/.dsh-competition/<团队 id>/`；索引在 `$DSH_HOME/data/competition-team/`。删团队只移出列表，不删会话和文件。

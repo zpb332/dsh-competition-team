@@ -27,7 +27,7 @@ A DSH plugin, not a standalone app. Once installed, a **Competition Team** entry
 
 ## Requirements
 
-- DeepSeek Harness `>= 0.2.1` (verified against `0.2.2-rc.3` desktop runtime)
+- DeepSeek Harness `>= 0.2.1` (real team smoke on `0.2.2-rc.5`; full test suite on `0.2.2-rc.3`)
 - Node.js `>= 20` (tests only)
 
 ## Install
